@@ -12,14 +12,17 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 	
 	//Global Static Constants
 	private static final int FPS = 10; //movements per second
-	private static final int BOARD_SIZE = 30;
+	private static final int BOARD_SIZE = 10;
 	
 	//Game Colors
 	public static final Color cellBorder = new Color(0, 51, 102);
 	public static final Color cellBG = new Color(0, 0, 0);
-	public static final Color snakeHead = new Color(0, 150, 0);
-	public static final Color snakeBody = new Color(0, 200, 0);
-	public static final Color foodColor = new Color(255,0, 0);
+	
+	private static int foodColorRed = 255;
+	public static Color foodColor;
+	
+	public static final Color snakeHead = new Color(0, 125, 0);
+	private static int bodyColor_counter = 0; //body color is set by a method below
 	
 	//Booleans
 	private final boolean showCellBorder = true;
@@ -60,13 +63,13 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 		if (showCellBorder)
 			g.setColor(cellBorder);
 		else
-			g.setColor(Color.BLACK);
+			g.setColor(cellBG);
 		
 		g.fillRect(0, 0, (Board.TILE_WIDTH + Board.borderPadding) * Board.XTILES, Board.borderPadding);
 		g.fillRect(0, 0, Board.borderPadding, (Board.TILE_HEIGHT + Board.borderPadding) * Board.YTILES);
 		g.fillRect(0, 0, (Board.TILE_WIDTH + Board.borderPadding) * Board.XTILES + Board.borderPadding,
 				         (Board.TILE_HEIGHT + Board.borderPadding) * Board.YTILES + Board.borderPadding);
-		
+		setFoodColor();
 		b.displayBoard(g, f);
 		
 		if (isGameOver) { //draws if game is over
@@ -113,6 +116,37 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 		f = new Food();
 		isGameOver = false;
 		Snake.isUp = false; Snake.isDown = false; Snake.isLeft = false; Snake.isRight = false;
+	}
+	
+	public static Color bodyColor()
+	{
+		bodyColor_counter++;
+		switch (bodyColor_counter % 7)
+		{
+		  case 1 :
+			return new Color(0, 170, 0);
+		  case 2 :
+			return new Color(0, 175, 0);
+		  case 3 :
+			return new Color(0, 180, 0);
+		  case 4 :
+			return new Color(0, 185, 0);
+		  case 5 :
+			return new Color(0, 190, 0);
+		  case 6 :
+			return new Color(0, 195, 0);
+		  default :
+			return new Color(0, 200, 0);
+		}
+	}
+	
+	private void setFoodColor()
+	{
+		if (foodColorRed > 200)
+			foodColorRed -= 10;
+		else
+			foodColorRed = 255;
+		foodColor = new Color(foodColorRed, 0, 0);
 	}
 
 	@Override

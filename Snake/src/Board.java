@@ -3,9 +3,9 @@ import java.awt.Graphics;
 public class Board {
 	
 	//Constants
-	public static final int TILE_WIDTH = 25;
-	public static final int TILE_HEIGHT = 25;
-	public static final int borderPadding = 3;
+	public static final int TILE_WIDTH = 20;
+	public static final int TILE_HEIGHT = 20;
+	public static final int borderPadding = 2;
 	public static int XTILES;
 	public static int YTILES;
 	
@@ -45,7 +45,7 @@ public class Board {
 					if (i == Snake.arr.get(0).getY(Snake.arr.get(0)) && j == Snake.arr.get(0).getX(Snake.arr.get(0))) //head
 						g.setColor(TopClass.snakeHead);
 					else
-						g.setColor(TopClass.snakeBody); //body
+						g.setColor(TopClass.bodyColor()); //body
 					g.fillRect( arr[i][j].getX() + borderPadding, arr[i][j].getY() + borderPadding, arr[i][j].getWidth(), arr[i][j].getHeight() );
 				}
 			}
