@@ -12,16 +12,9 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 	
 	//Global Static Constants
 	private static final int FPS = 10; //movements per second
-	private static final int BOARD_SIZE = 10;
+	private static final int BOARD_SIZE = 10; //size of game grid
 	
 	//Game Colors
-	public static final Color cellBorder = new Color(0, 51, 102);
-	public static final Color cellBG = new Color(0, 0, 0);
-	
-	private static int foodColorRed = 255;
-	public static Color foodColor;
-	
-	public static final Color snakeHead = new Color(0, 125, 0);
 	private static int bodyColor_counter = 0; //body color is set by a method below
 	
 	//Booleans
@@ -29,9 +22,9 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 	public static boolean isGameOver = false;
 	
 	//Create Game Objects
-	Board b = new Board(BOARD_SIZE, BOARD_SIZE);
-	Snake s = new Snake( (int)(Math.random() * Board.arr.length), (int)(Math.random() * Board.arr[0].length));
-	Food f = new Food();
+	Board board = new Board(BOARD_SIZE, BOARD_SIZE);
+	Snake snake = new Snake( (int)(Math.random() * Board.arr.length), (int)(Math.random() * Board.arr[0].length));
+	Food food = new Food();
 	
 	
 	public static void main(String[] args) 
@@ -51,38 +44,34 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 		
 	}
 	
-	public Dimension getPreferredSize()
+	public Dimension getPreferredSize() //sets the size of the window based on the size of the game grid
 	{
 		return new Dimension( (Board.TILE_WIDTH + Board.borderPadding) * Board.XTILES + Board.borderPadding,
 							  (Board.TILE_HEIGHT + Board.borderPadding) * Board.YTILES + Board.borderPadding);
 	}
 	
 	@Override
-	protected void paintComponent(Graphics g) 
+	protected void paintComponent(Graphics g) //draws all relevant objects to the screen
 	{
 		if (showCellBorder)
-			g.setColor(cellBorder);
+			g.setColor(board.getCellBorderColor());
 		else
-			g.setColor(cellBG);
+			g.setColor(board.getCellBackgroundColor());
 		
-		g.fillRect(0, 0, (Board.TILE_WIDTH + Board.borderPadding) * Board.XTILES, Board.borderPadding);
-		g.fillRect(0, 0, Board.borderPadding, (Board.TILE_HEIGHT + Board.borderPadding) * Board.YTILES);
-		g.fillRect(0, 0, (Board.TILE_WIDTH + Board.borderPadding) * Board.XTILES + Board.borderPadding,
-				         (Board.TILE_HEIGHT + Board.borderPadding) * Board.YTILES + Board.borderPadding);
-		setFoodColor();
-		b.displayBoard(g, f);
+		food.updateColor();
+		board.displayBoard(g, food);
 		
 		if (isGameOver) { //draws if game is over
 			g.setFont(new Font("sansserif", Font.BOLD, 42));
 			g.setColor(new Color( (int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255) ));
-			g.drawString("LOSER", 200, 300);
+			g.drawString("LOSER", Board.TILE_WIDTH * Board.XTILES/2 - 62, Board.TILE_HEIGHT * Board.YTILES/2 + 26);
 		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) 
 	{
-		s.updateSnake(f);
+		snake.updateSnake(food);
 		repaint();
 	}
 
@@ -110,15 +99,15 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 	
 	private void resetGame()
 	{
-		b = new Board(BOARD_SIZE, BOARD_SIZE);
+		board = new Board(BOARD_SIZE, BOARD_SIZE);
 		Snake.arr = new ArrayList <Snake>();
-		s = new Snake( (int)(Math.random() * Board.arr.length), (int)(Math.random() * Board.arr[0].length));
-		f = new Food();
+		snake = new Snake( (int)(Math.random() * Board.arr.length), (int)(Math.random() * Board.arr[0].length));
+		food = new Food();
 		isGameOver = false;
 		Snake.isUp = false; Snake.isDown = false; Snake.isLeft = false; Snake.isRight = false;
 	}
 	
-	public static Color bodyColor()
+	public static Color bodyColor() //makes snake body different colors
 	{
 		bodyColor_counter++;
 		switch (bodyColor_counter % 7)
@@ -139,23 +128,10 @@ public class TopClass extends JComponent implements ActionListener, KeyListener 
 			return new Color(0, 200, 0);
 		}
 	}
-	
-	private void setFoodColor()
-	{
-		if (foodColorRed > 200)
-			foodColorRed -= 10;
-		else
-			foodColorRed = 255;
-		foodColor = new Color(foodColorRed, 0, 0);
-	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void keyReleased(KeyEvent e) {}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void keyTyped(KeyEvent e) {}
 }

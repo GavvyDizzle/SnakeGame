@@ -1,9 +1,13 @@
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class Food {
 
 	//Food Variables
 	private int x, y;
+	
+	//Colors
+	private static Color food_Color = Color.RED;
 	
 	
 	public Food()
@@ -24,6 +28,15 @@ public class Food {
 		}
 	}
 	
+	public void updateColor() //makes the food pulse red
+	{
+		if (food_Color.getRed() > 200)
+			food_Color = new Color(food_Color.getRed()-10, 0, 0);
+		else
+			food_Color = Color.RED;
+		//food_Color = Color.RED;
+	}
+	
 	public boolean isFoodEaten(Snake a) //Did snake eat the food
 	{
 		return a.getNextX(a) == y && a.getNextY(a) == x;
@@ -36,6 +49,11 @@ public class Food {
 	public int getY()
 	{
 		return y;
+	}
+	
+	public Color getColor()
+	{
+		return food_Color;
 	}
 	
 	public Food getFood(Food f) //returns food object

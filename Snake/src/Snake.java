@@ -78,7 +78,7 @@ public class Snake {
 		Board.bool[y][x] = true;
 	}
 	
-	private void updateBody() //go to position of block of i - 1
+	private void updateBody() //go to position of block of i-1
 	{
 		if (arr.size() > 1)
 			Board.bool[arr.get(arr.size()-1).y][arr.get(arr.size()-1).x] = false;
